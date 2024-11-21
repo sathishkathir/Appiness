@@ -1,0 +1,61 @@
+<div class="main">
+
+    <mat-toolbar class="toolbar" color="primary">
+        <span class="fill-remaining-space">Dynamic Forms</span>
+    </mat-toolbar>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+        <div *ngFor="let field of formDef">
+            <div class="form-group" *ngIf="checkConditions(field)">
+                <mat-form-field *ngIf="field.fieldtype === 'text'"
+                    appearance="fill"  class="form-element">
+                    <mat-label>{{ field.name }}</mat-label>
+                    <input matInput [formControlName]="field.name"
+                        placeholder="{{ field.name }}" />
+                    <mat-error
+                        *ngIf="form.get(field.name)?.hasError('required')">
+                        {{ field.name }} is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="field.fieldtype === 'integer'"
+                    appearance="fill" class="form-element">
+                    <mat-label>{{ field.name }}</mat-label>
+                    <input matInput type="number" [formControlName]="field.name"
+                        placeholder="{{ field.name }}" />
+                    <mat-error
+                        *ngIf="form.get(field.name)?.hasError('required')">
+                        {{ field.name }} is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="field.fieldtype === 'date'"
+                    appearance="fill" class="form-element">
+                    <mat-label>{{ field.name }}</mat-label>
+                    <input matInput [matDatepicker]="picker"
+                        [formControlName]="field.name"
+                        placeholder="{{ field.name }}" />
+                    <mat-datepicker-toggle matSuffix
+                        [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error
+                        *ngIf="form.get(field.name)?.hasError('required')">
+                        {{ field.name }} is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field *ngIf="field.fieldtype === 'boolean'"
+                    appearance="fill" class="form-element">
+                    <mat-label>{{ field.name }}</mat-label>
+                    <mat-select [formControlName]="field.name">
+                        <mat-option *ngFor="let option of field.selectList"
+                            [value]="option">{{ option }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+    </form>
+
+</div>
